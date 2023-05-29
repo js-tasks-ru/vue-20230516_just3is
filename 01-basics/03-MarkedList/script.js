@@ -1,4 +1,4 @@
-// import { createApp } from './vendor/vue.esm-browser.js';
+import { createApp } from './vendor/vue.esm-browser.js';
 
 // From https://jsonplaceholder.typicode.com/comments
 const emails = [
@@ -29,4 +29,34 @@ const emails = [
   'Isaias_Kuhic@jarrett.net',
 ];
 
-// Требуется создать Vue приложение
+createApp({
+  name: 'MarkedList',
+  data() {
+    return {
+      search: '',
+    };
+  },
+  computed: {
+    normalizedEmails() {
+      return emails.map(this.normalize);
+    }
+  },
+  methods: {
+    normalize(email) {
+      return {
+        value: email,
+        selected: this.search && email.includes(this.search)
+      };
+    }
+  },
+  template: `
+    <div class="container">
+      <div class="form-group">
+        <input type="search" v-model="search" />
+      </div>
+      <ul>
+        <li v-for="{value, selected} in normalizedEmails" :class="{ marked: selected }">{{ value }}</li>
+      </ul>
+    </div>
+  `
+}).mount('#app')
